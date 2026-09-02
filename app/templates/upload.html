@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Upload CSV - Retail-Pulse{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Upload this week's sales CSV</h2>
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  {% if ok %}<div class="ok">Upload successful - {{ ok }}. <a href="/dashboard">View dashboard →</a></div>{% endif %}
+  <form method="post" action="/upload" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required>
+    <br><br>
+    <button type="submit">Upload</button>
+  </form>
+  <p class="muted">
+    Required columns: <code>sku, date, quantity_sold</code>.
+    Optional: <code>name, revenue, on_hand, reorder_point</code>.
+    One row per SKU per day. <a href="/sample.csv">Download a sample file</a>.
+  </p>
+</div>
+
+<div class="card">
+  <h3>Recent uploads</h3>
+  <table>
+    <tr><th>When</th><th>File</th><th>Rows</th><th>Status</th></tr>
+    {% for u in uploads %}
+    <tr>
+      <td>{{ u.uploaded_at.strftime("%Y-%m-%d %H:%M") }}</td>
+      <td>{{ u.filename }}</td>
+      <td>{{ u.row_count }}</td>
+      <td>{{ u.status }}{% if u.message %} - {{ u.message }}{% endif %}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">No uploads yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

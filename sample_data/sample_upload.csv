@@ -1,0 +1,14 @@
+sku,name,date,quantity_sold,revenue,on_hand,reorder_point
+SKU001,Basmati Rice 5kg,2026-08-27,12,3600,8,15
+SKU001,Basmati Rice 5kg,2026-08-28,9,2700,8,15
+SKU001,Basmati Rice 5kg,2026-08-29,15,4500,8,15
+SKU002,Sunflower Oil 1L,2026-08-27,20,2400,40,20
+SKU002,Sunflower Oil 1L,2026-08-28,18,2160,40,20
+SKU003,Toor Dal 1kg,2026-08-27,6,720,3,10
+SKU003,Toor Dal 1kg,2026-08-28,4,480,3,10
+SKU003,Toor Dal 1kg,2026-08-29,5,600,3,10
+SKU004,Detergent Powder 1kg,2026-07-15,2,240,25,5
+SKU005,Tea Powder 500g,2026-08-27,10,1500,12,8
+SKU005,Tea Powder 500g,2026-08-29,8,1200,12,8
+SKU006,Biscuits Family Pack,2026-08-28,14,980,6,12
+SKU007,Salt 1kg,2026-08-27,25,500,50,20

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: retail-pulse
+    runtime: docker
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./retail_pulse.db
+    healthCheckPath: /health
