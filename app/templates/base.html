@@ -2,34 +2,100 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Retail-Pulse{% endblock %}</title>
 <style>
-  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; background: #f7f7f5; color: #222; margin: 0; }
-  header { background: #1b1f27; color: #fff; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
-  header a { color: #fff; text-decoration: none; font-weight: 600; }
-  header nav a { color: #cbd5e1; margin-left: 16px; font-weight: 400; font-size: 14px; }
-  main { max-width: 960px; margin: 0 auto; padding: 24px; }
-  .card { background: #fff; border: 1px solid #e5e5e0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #eee; }
-  th { color: #555; font-weight: 600; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
-  .badge-alert { background: #fde2e1; color: #9b1c1c; }
-  .badge-stale { background: #fef3c7; color: #92400e; }
-  form.simple { display: flex; flex-direction: column; gap: 10px; max-width: 360px; }
-  input, button { padding: 9px 12px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
-  button { background: #1b1f27; color: #fff; border: none; cursor: pointer; }
-  .error { background: #fde2e1; color: #9b1c1c; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; }
-  .ok { background: #dcfce7; color: #166534; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; }
-  .muted { color: #888; font-size: 13px; }
+  :root {
+    --ink: #1a1d24;
+    --ink-soft: #4b5160;
+    --paper: #f6f5f2;
+    --card: #ffffff;
+    --line: #e7e5df;
+    --accent: #2f6f4f;
+    --accent-ink: #ffffff;
+    --alert-bg: #fdecea; --alert-ink: #a02f2a;
+    --warn-bg: #fdf3e0;  --warn-ink: #8a5a10;
+    --ok-bg: #e7f5ec;    --ok-ink: #1f6e42;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(20,20,15,0.04), 0 4px 14px rgba(20,20,15,0.05);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--paper); color: var(--ink); margin: 0; line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    background: var(--ink); color: #fff; padding: 14px 20px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  }
+  header .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #fff; font-weight: 700; font-size: 17px; }
+  header .brand .dot { width: 9px; height: 9px; border-radius: 50%; background: #7fd8a8; display: inline-block; }
+  header nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  header nav a { color: #cfd3da; text-decoration: none; font-size: 14px; font-weight: 500; }
+  header nav a:hover { color: #fff; }
+  header .shop-name { color: #9aa1ac; font-size: 13px; padding-right: 4px; border-right: 1px solid #383d47; margin-right: 4px; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .card h2 { margin-top: 0; }
+  .card h3 { margin-top: 0; font-size: 15px; letter-spacing: .01em; }
+
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 420px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { color: var(--ink-soft); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; }
+  tr:last-child td { border-bottom: none; }
+
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .badge-alert { background: var(--alert-bg); color: var(--alert-ink); }
+  .badge-stale { background: var(--warn-bg); color: var(--warn-ink); }
+  .badge-ok { background: var(--ok-bg); color: var(--ok-ink); }
+
+  form.simple { display: flex; flex-direction: column; gap: 12px; max-width: 360px; }
+  label { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: -6px; }
+  input[type=text], input[type=email], input[type=password], input[type=file] {
+    padding: 11px 13px; font-size: 15px; border-radius: 8px; border: 1px solid #d7d5cf;
+    background: #fff; color: var(--ink); width: 100%;
+  }
+  input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  button, .btn {
+    padding: 11px 16px; font-size: 15px; font-weight: 600; border-radius: 8px; border: none;
+    background: var(--accent); color: var(--accent-ink); cursor: pointer; text-align: center;
+    text-decoration: none; display: inline-block;
+  }
+  button:hover, .btn:hover { filter: brightness(0.94); }
+  button:disabled { opacity: .65; cursor: progress; }
+  button.secondary, .btn.secondary { background: #fff; color: var(--ink); border: 1px solid #d7d5cf; }
+
+  .notice { padding: 11px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+  .error { background: var(--alert-bg); color: var(--alert-ink); }
+  .ok { background: var(--ok-bg); color: var(--ok-ink); }
+  .info { background: #eef3fb; color: #2b527f; }
+
+  .muted { color: #8a8f99; font-size: 13px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .steps li { display: flex; gap: 12px; align-items: flex-start; }
+  .steps .num {
+    flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+
+  @media (max-width: 560px) {
+    main { padding: 18px 14px 50px; }
+    .card { padding: 16px; }
+    header { padding: 12px 14px; }
+    form.simple { max-width: 100%; }
+  }
 </style>
 </head>
 <body>
 <header>
-  <a href="/">Retail-Pulse</a>
+  <a class="brand" href="/"><span class="dot"></span> Retail-Pulse</a>
   <nav>
     {% if user %}
-      <span class="muted" style="color:#cbd5e1;">{{ user.shop_name }}</span>
+      <span class="shop-name">{{ user.shop_name }}</span>
       <a href="/dashboard">Dashboard</a>
       <a href="/upload">Upload CSV</a>
       <a href="/logout">Log out</a>
@@ -42,5 +108,25 @@
 <main>
 {% block content %}{% endblock %}
 </main>
+<script>
+  // Free-tier hosting spins the server down after ~15 min idle; the
+  // first request after that can take up to ~30-50s to wake it. Firing
+  // a background ping as soon as an auth page loads means the server is
+  // often already awake by the time someone finishes typing and submits
+  // - it can't eliminate a cold start, but it hides it in most cases.
+  fetch("/health").catch(() => {});
+
+  // Give immediate feedback on submit instead of a frozen-looking page,
+  // and explain *why* it might be slow rather than let it look broken.
+  document.querySelectorAll("form").forEach(function (form) {
+    form.addEventListener("submit", function () {
+      var btn = form.querySelector("button[type=submit]");
+      if (!btn) return;
+      btn.disabled = true;
+      btn.dataset.originalText = btn.textContent;
+      btn.textContent = "Working... (up to 30s if the server was asleep)";
+    });
+  });
+</script>
 </body>
 </html>

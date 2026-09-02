@@ -3,22 +3,31 @@
 {% block content %}
 <div class="card">
   <h2>Upload this week's sales CSV</h2>
-  {% if error %}<div class="error">{{ error }}</div>{% endif %}
-  {% if ok %}<div class="ok">Upload successful - {{ ok }}. <a href="/dashboard">View dashboard →</a></div>{% endif %}
+  {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+  {% if ok %}<div class="notice ok">{{ ok }}. <a href="/dashboard">View dashboard →</a></div>{% endif %}
   <form method="post" action="/upload" enctype="multipart/form-data">
     <input type="file" name="file" accept=".csv" required>
     <br><br>
     <button type="submit">Upload</button>
   </form>
-  <p class="muted">
-    Required columns: <code>sku, date, quantity_sold</code>.
-    Optional: <code>name, revenue, on_hand, reorder_point</code>.
-    One row per SKU per day. <a href="/sample.csv">Download a sample file</a>.
-  </p>
+</div>
+
+<div class="card">
+  <h3>Expected format</h3>
+  <p class="muted">One row per SKU per day. Required columns in <strong>bold</strong>; the rest are optional but improve accuracy.</p>
+  <div class="table-scroll">
+  <table>
+    <tr><th><strong>sku</strong></th><th>name</th><th><strong>date</strong></th><th><strong>quantity_sold</strong></th><th>revenue</th><th>on_hand</th><th>reorder_point</th></tr>
+    <tr><td>SKU001</td><td>Basmati Rice 5kg</td><td>2026-08-27</td><td>12</td><td>3600</td><td>8</td><td>15</td></tr>
+    <tr><td>SKU002</td><td>Sunflower Oil 1L</td><td>2026-08-27</td><td>20</td><td>2400</td><td>40</td><td>20</td></tr>
+  </table>
+  </div>
+  <p class="muted" style="margin-top:12px;">Not sure your export matches? <a href="/sample.csv">Download the sample file</a> and compare, or upload it as-is to see the dashboard in action.</p>
 </div>
 
 <div class="card">
   <h3>Recent uploads</h3>
+  <div class="table-scroll">
   <table>
     <tr><th>When</th><th>File</th><th>Rows</th><th>Status</th></tr>
     {% for u in uploads %}
@@ -26,11 +35,16 @@
       <td>{{ u.uploaded_at.strftime("%Y-%m-%d %H:%M") }}</td>
       <td>{{ u.filename }}</td>
       <td>{{ u.row_count }}</td>
-      <td>{{ u.status }}{% if u.message %} - {{ u.message }}{% endif %}</td>
+      <td>
+        {% if u.status == "OK" %}<span class="badge badge-ok">OK</span>
+        {% else %}<span class="badge badge-alert">{{ u.status }}</span>{% endif %}
+        {% if u.message %} - {{ u.message }}{% endif %}
+      </td>
     </tr>
     {% else %}
     <tr><td colspan="4" class="muted">No uploads yet.</td></tr>
     {% endfor %}
   </table>
+  </div>
 </div>
 {% endblock %}

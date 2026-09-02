@@ -3,12 +3,22 @@
 {% block content %}
 <div class="card" style="max-width:400px;">
   <h2>Create your shop account</h2>
-  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+  <p class="muted" style="margin-top:-8px;">Free to try. Takes about a minute.</p>
+  {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
   <form class="simple" method="post" action="/signup">
-    <input type="text" name="shop_name" placeholder="Shop name" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required minlength="8">
-    <button type="submit">Sign up</button>
+    <div>
+      <label for="shop_name">Shop name</label>
+      <input id="shop_name" type="text" name="shop_name" placeholder="e.g. Sharma General Store" required>
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" placeholder="you@example.com" required>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" name="password" placeholder="At least 8 characters" required minlength="8">
+    </div>
+    <button type="submit">Create account</button>
   </form>
   <p class="muted">Already have an account? <a href="/login">Log in</a></p>
 </div>

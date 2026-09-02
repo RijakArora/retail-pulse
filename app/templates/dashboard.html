@@ -3,12 +3,20 @@
 {% block content %}
 {% if not data.has_data %}
 <div class="card">
-  <p>No data yet. <a href="/upload">Upload your first CSV</a> to see your dashboard.</p>
+  <h2>Welcome, {{ user.shop_name }} 👋</h2>
+  <p class="muted">You're set up - just one step left to see your first dashboard.</p>
+  <ul class="steps">
+    <li><span class="num">1</span><span>Export a CSV from your POS or spreadsheet with columns: <code>sku, date, quantity_sold</code> (optionally <code>name, revenue, on_hand, reorder_point</code>).</span></li>
+    <li><span class="num">2</span><span>Don't have one handy? <a href="/sample.csv">Download a sample file</a> to see the exact format, or use it to try the dashboard right now.</span></li>
+    <li><span class="num">3</span><span><a href="/upload">Upload it here</a> - your dashboard appears immediately after.</span></li>
+  </ul>
+  <div style="margin-top:16px;"><a class="btn" href="/upload">Upload your CSV →</a></div>
 </div>
 {% else %}
 
 <div class="card">
   <h3>Top Sellers <span class="muted">(last 7 days)</span></h3>
+  <div class="table-scroll">
   <table>
     <tr><th>SKU</th><th>Qty sold</th><th>Revenue</th></tr>
     {% for s in data.top_sellers %}
@@ -17,35 +25,41 @@
     <tr><td colspan="3" class="muted">No sales in the last 7 days.</td></tr>
     {% endfor %}
   </table>
+  </div>
 </div>
 
 <div class="card">
   <h3>Reorder Alerts <span class="badge badge-alert">{{ data.reorder_alerts|length }}</span></h3>
+  <div class="table-scroll">
   <table>
     <tr><th>SKU</th><th>Name</th><th>On hand</th><th>Reorder point</th></tr>
     {% for s in data.reorder_alerts %}
     <tr><td>{{ s.sku_code }}</td><td>{{ s.name }}</td><td>{{ s.on_hand }}</td><td>{{ s.reorder_point }}</td></tr>
     {% else %}
-    <tr><td colspan="4" class="muted">Nothing below its reorder point.</td></tr>
+    <tr><td colspan="4" class="muted">Nothing below its reorder point <span class="badge badge-ok">good</span></td></tr>
     {% endfor %}
   </table>
+  </div>
 </div>
 
 <div class="card">
   <h3>Stale Stock <span class="badge badge-stale">{{ data.stale_stock|length }}</span> <span class="muted">(no sale in 30+ days)</span></h3>
+  <div class="table-scroll">
   <table>
     <tr><th>SKU</th><th>Name</th><th>Last sale</th></tr>
     {% for s in data.stale_stock %}
     <tr><td>{{ s.sku_code }}</td><td>{{ s.name }}</td><td>{{ s.last_sale_date or "never" }}</td></tr>
     {% else %}
-    <tr><td colspan="3" class="muted">Nothing stale.</td></tr>
+    <tr><td colspan="3" class="muted">Nothing stale <span class="badge badge-ok">good</span></td></tr>
     {% endfor %}
   </table>
+  </div>
 </div>
 
 <div class="card">
   <h3>Suggested Next Order</h3>
   <p class="muted">Heuristic: reorder point + half a week's recent sales, minus current stock. Sanity-check before ordering, not a forecast.</p>
+  <div class="table-scroll">
   <table>
     <tr><th>SKU</th><th>Name</th><th>On hand</th><th>Suggested order qty</th></tr>
     {% for s in data.suggested_orders %}
@@ -54,6 +68,7 @@
     <tr><td colspan="4" class="muted">No suggested orders right now.</td></tr>
     {% endfor %}
   </table>
+  </div>
 </div>
 
 <p class="muted">Generated {{ data.generated_at }}. <a href="/upload">Upload a new CSV</a> to refresh.</p>
